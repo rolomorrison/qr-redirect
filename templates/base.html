@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>{% block title %}Panel{% endblock %} · RA Digital</title>
+<style>
+:root{--bg:#0B0F1A;--card:#151B2A;--fg:#F2F5F3;--mut:#9aa6b2;--teal:#41DEC1;--line:#26304a;--bad:#ff7b7b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,Segoe UI,Roboto,sans-serif}
+a{color:var(--teal)}
+header{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
+header b{font-size:18px}
+header nav{display:flex;flex-wrap:wrap;gap:4px 14px;flex:1}
+header nav a{text-decoration:none;color:var(--fg);padding:4px 0;border-bottom:2px solid transparent}
+header nav a:hover{border-color:var(--teal)}
+main{max-width:1000px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:24px;margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat b{display:block;font-size:30px;color:var(--teal)}
+.stat span{color:var(--mut);font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mut);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+.tw{overflow-x:auto}
+label{display:block;font-size:14px;color:var(--mut);margin:10px 0 4px}
+input,select,textarea{width:100%;background:#0E1424;color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit}
+input[type=checkbox]{width:auto}
+button,.btn{background:var(--teal);color:#0B0F1A;border:0;border-radius:999px;padding:10px 18px;font:700 15px system-ui;cursor:pointer;text-decoration:none;display:inline-block}
+button.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:12px}.row>*{flex:1;min-width:140px}
+.flash{background:#12332f;border:1px solid var(--teal);padding:10px 14px;border-radius:10px;margin-bottom:14px}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:13px;border:1px solid var(--line);color:var(--mut)}
+.pill.ok{color:var(--teal);border-color:var(--teal)}.pill.bad{color:var(--bad);border-color:var(--bad)}
+code{background:#0E1424;padding:2px 6px;border-radius:6px;word-break:break-all}
+form.inline{display:inline}
+</style></head><body>
+{% if session.get('auth') %}
+<header><b>RA Digital</b><nav>
+<a href="{{ url_for('dashboard') }}">Inicio</a><a href="{{ url_for('tags') }}">Placas</a>
+<a href="{{ url_for('clients') }}">Clientes</a><a href="{{ url_for('orders') }}">Pedidos</a>
+<a href="{{ url_for('report') }}">Reporte</a></nav>
+<form method="post" action="{{ url_for('logout') }}" class="inline"><input type="hidden" name="csrf" value="{{ csrf_token() }}"><button class="ghost" type="submit">Salir</button></form></header>
+{% endif %}
+<main>
+{% for m in get_flashed_messages() %}<div class="flash">{{ m }}</div>{% endfor %}
+{% block body %}{% endblock %}
+</main></body></html>

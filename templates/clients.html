@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block title %}Clientes{% endblock %}
+{% block body %}<h1>Clientes</h1>
+<form method="post" class="card"><input type="hidden" name="csrf" value="{{ csrf_token() }}"><div class="row" style="align-items:end">
+<div><label>Negocio</label><input name="name" required></div><div><label>Teléfono</label><input name="phone"></div>
+<div><label>Notas</label><input name="notes"></div><div><button type="submit">Agregar</button></div></div></form>
+<div class="card tw"><table><tr><th>Negocio</th><th>Teléfono</th><th>Placas</th><th>Vendido (Gs.)</th><th>Notas</th></tr>
+{% for r in rows %}<tr><td>{{ r.name }}</td><td>{{ r.phone }}</td><td>{{ r.ntags }}</td><td>{{ '{:,}'.format(r.vendido).replace(',', '.') }}</td><td>{{ r.notes }}</td></tr>
+{% else %}<tr><td colspan="5">Sin clientes todavía.</td></tr>{% endfor %}</table></div>
+{% endblock %}

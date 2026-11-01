@@ -1,0 +1,16 @@
+{% extends 'base.html' %}{% block title %}{{ t.id }}{% endblock %}
+{% block body %}<h1>Placa {{ t.id }}</h1>
+<div class="card"><p style="margin-top:0">Link para grabar en el chip NFC:<br><code>{{ link }}?s=n</code></p>
+<p>Link del QR: <code>{{ link }}?s=q</code> · <a href="{{ url_for('qr_png', tag_id=t.id) }}">Bajar QR (PNG)</a></p></div>
+<form method="post" class="card"><input type="hidden" name="csrf" value="{{ csrf_token() }}">
+<label>Cliente</label><select name="client_id"><option value="">— sin asignar —</option>
+{% for c in clients %}<option value="{{ c.id }}" {{ 'selected' if c.id == t.client_id }}>{{ c.name }}</option>{% endfor %}</select>
+<label>Destino (link completo o Place ID de Google, empieza con ChIJ)</label>
+<input name="dest_url" value="{{ t.dest_url }}" placeholder="https://search.google.com/local/writereview?placeid=...">
+<div class="row"><div><label>Tipo de placa</label><select name="plate">{% for p in plates %}<option {{ 'selected' if p == t.plate }}>{{ p }}</option>{% endfor %}</select></div>
+<div><label>Notas</label><input name="notes" value="{{ t.notes }}"></div></div>
+<label><input type="checkbox" name="active" {{ 'checked' if t.active }}> Activa (si se desmarca, muestra la página de "no activada")</label>
+<p><button type="submit">Guardar</button> <a class="btn ghost" style="background:transparent;color:inherit;border:1px solid var(--line)" href="{{ url_for('tags') }}">Volver</a></p></form>
+<div class="card"><h3 style="margin-top:0">Escaneos: {{ total }}</h3><div class="tw"><table><tr><th>Fecha (UTC)</th><th>Vía</th></tr>
+{% for s in scans %}<tr><td>{{ s.ts }}</td><td>{{ {'n':'NFC','q':'QR'}.get(s.source,'?') }}</td></tr>{% else %}<tr><td colspan="2">Sin escaneos.</td></tr>{% endfor %}</table></div></div>
+{% endblock %}

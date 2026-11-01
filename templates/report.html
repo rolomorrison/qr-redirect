@@ -1,0 +1,8 @@
+{% extends 'base.html' %}{% block title %}Reporte{% endblock %}
+{% block body %}<h1>Escaneos del mes</h1>
+<form method="get" class="card row" style="align-items:end"><div><label>Mes (AAAA-MM)</label><input name="mes" value="{{ month }}" pattern="\d{4}-\d{2}"></div>
+<div><button type="submit">Ver</button> <a class="btn ghost" style="background:transparent;color:inherit;border:1px solid var(--line)" href="{{ url_for('report_csv', mes=month) }}">Bajar CSV</a></div></form>
+<div class="card tw"><table><tr><th>Cliente</th><th>Placa</th><th>Escaneos</th><th>NFC</th><th>QR</th></tr>
+{% for r in rows %}<tr><td>{{ r.name }}</td><td>{{ r.tag_id }}</td><td>{{ r.n }}</td><td>{{ r.nfc or 0 }}</td><td>{{ r.qr or 0 }}</td></tr>
+{% else %}<tr><td colspan="5">Sin escaneos en {{ month }}.</td></tr>{% endfor %}</table></div>
+{% endblock %}

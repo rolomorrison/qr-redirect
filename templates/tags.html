@@ -1,0 +1,15 @@
+{% extends 'base.html' %}{% block title %}Placas{% endblock %}
+{% block body %}<h1>Placas</h1>
+<div class="card"><form method="post" action="{{ url_for('tags_new') }}" class="row" style="align-items:end">
+<input type="hidden" name="csrf" value="{{ csrf_token() }}">
+<div><label>Desde el número</label><input name="start" type="number" value="1" min="1" required></div>
+<div><label>Cantidad</label><input name="count" type="number" value="100" min="1" max="500" required></div>
+<div><label>Tipo</label><select name="plate"><option>PVC</option><option>Acrílico</option><option>Mesa</option><option>Pegatina</option><option>Otro</option></select></div>
+<div><button type="submit">Crear IDs</button></div></form></div>
+<p><a href="?">Todas</a> · <a href="?estado=libres">Libres</a> · <a href="?estado=asignadas">Asignadas</a></p>
+<div class="card tw"><table><tr><th>ID</th><th>Tipo</th><th>Cliente</th><th>Estado</th><th>Escaneos</th><th>Último</th></tr>
+{% for r in rows %}<tr><td><a href="{{ url_for('tag_edit', tag_id=r.id) }}">{{ r.id }}</a></td><td>{{ r.plate }}</td><td>{{ r.client or '—' }}</td>
+<td>{% if not r.dest_url %}<span class="pill">sin activar</span>{% elif r.active %}<span class="pill ok">activa</span>{% else %}<span class="pill bad">pausada</span>{% endif %}</td>
+<td>{{ r.n }}</td><td>{{ r.last or '—' }}</td></tr>
+{% else %}<tr><td colspan="6">No hay placas. Creá las primeras arriba.</td></tr>{% endfor %}</table></div>
+{% endblock %}

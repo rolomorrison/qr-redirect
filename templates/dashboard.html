@@ -1,0 +1,13 @@
+{% extends 'base.html' %}{% block title %}Inicio{% endblock %}
+{% block body %}<h1>Inicio</h1>
+<div class="grid">
+<div class="card stat"><b>{{ stats.tags }}</b><span>Placas creadas</span></div>
+<div class="card stat"><b>{{ stats.assigned }}</b><span>Asignadas</span></div>
+<div class="card stat"><b>{{ stats.scans_month }}</b><span>Escaneos este mes</span></div>
+<div class="card stat"><b>{{ stats.pending }}</b><span>Pedidos sin pagar</span></div></div>
+<div class="card"><h3 style="margin-top:0">Últimos escaneos (hora UTC)</h3><div class="tw"><table>
+<tr><th>Placa</th><th>Cliente</th><th>Vía</th><th>Fecha</th></tr>
+{% for r in recent %}<tr><td><a href="{{ url_for('tag_edit', tag_id=r.tag_id) }}">{{ r.tag_id }}</a></td><td>{{ r.name or '—' }}</td>
+<td>{{ {'n':'NFC','q':'QR'}.get(r.source,'?') }}</td><td>{{ r.ts }}</td></tr>
+{% else %}<tr><td colspan="4">Todavía no hay escaneos.</td></tr>{% endfor %}</table></div></div>
+{% endblock %}

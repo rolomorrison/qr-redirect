@@ -1,0 +1,13 @@
+{% extends 'base.html' %}{% block title %}Pedidos{% endblock %}
+{% block body %}<h1>Pedidos</h1>
+<form method="post" class="card"><input type="hidden" name="csrf" value="{{ csrf_token() }}">
+<div class="row"><div><label>Cliente</label><select name="client_id"><option value="">—</option>{% for c in clients %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}</select></div>
+<div><label>Qué compró</label><input name="items" placeholder="2 placas PVC + 1 mesa" required></div>
+<div><label>Total (Gs.)</label><input name="total" inputmode="numeric" placeholder="180000"></div></div>
+<label><input type="checkbox" name="paid"> Ya pagó</label><p><button type="submit">Registrar</button></p></form>
+<div class="card tw"><table><tr><th>Fecha</th><th>Cliente</th><th>Detalle</th><th>Total</th><th>Pago</th></tr>
+{% for r in rows %}<tr><td>{{ r.day }}</td><td>{{ r.name or '—' }}</td><td>{{ r['items'] }}</td><td>{{ '{:,}'.format(r.total).replace(',', '.') }}</td>
+<td><form method="post" action="{{ url_for('order_paid', oid=r.id) }}" class="inline"><input type="hidden" name="csrf" value="{{ csrf_token() }}">
+<button class="ghost" type="submit">{{ 'Pagado ✓' if r.paid else 'Pendiente' }}</button></form></td></tr>
+{% else %}<tr><td colspan="5">Sin pedidos.</td></tr>{% endfor %}</table></div>
+{% endblock %}

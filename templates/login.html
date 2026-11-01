@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block title %}Entrar{% endblock %}
+{% block body %}
+<div class="card" style="max-width:380px;margin:60px auto">
+<h1>RA Digital</h1>
+<form method="post"><input type="hidden" name="csrf" value="{{ csrf_token() }}">
+<label>Usuario</label><input name="user" autocomplete="username" required autofocus>
+<label>Clave</label><input name="password" type="password" autocomplete="current-password" required>
+<p><button type="submit">Entrar</button></p></form></div>
+{% endblock %}
