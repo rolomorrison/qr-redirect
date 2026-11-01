@@ -6,4 +6,4 @@ COPY . .
 RUN mkdir -p /data
 ENV DB_PATH=/data/qr.db PORT=8000
 EXPOSE 8000
-CMD ["gunicorn", "-b", "0.0.0.0:8000", "-w", "2", "app:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "-w", "1", "app:app"]
