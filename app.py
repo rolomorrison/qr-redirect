@@ -15,10 +15,28 @@ import sqlite3
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 
+from jinja2 import ChoiceLoader, FileSystemLoader
 from flask import (Flask, Response, abort, flash, g, redirect, render_template,
                    request, send_file, session, url_for)
 
-app = Flask(__name__)
+HERE = os.path.dirname(os.path.abspath(__file__))
+app = Flask(__name__, static_folder=None)
+# Acepta los archivos tanto en la carpeta principal como en templates/ y static/
+app.jinja_loader = ChoiceLoader([FileSystemLoader(HERE),
+                                 FileSystemLoader(os.path.join(HERE, "templates"))])
+STATIC_OK = {"logo.png", "favicon.png"}
+
+
+@app.get("/static/<path:filename>", endpoint="static")
+def static_files(filename):
+    if filename not in STATIC_OK:
+        abort(404)
+    for d in (os.path.join(HERE, "static"), HERE):
+        f = os.path.join(d, filename)
+        if os.path.isfile(f):
+            return send_file(f, max_age=86400)
+    abort(404)
+
 app.config.update(
     SECRET_KEY=os.environ.get("SECRET_KEY") or secrets.token_hex(32),
     SESSION_COOKIE_HTTPONLY=True,
